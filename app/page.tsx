@@ -49,7 +49,8 @@ export default function Home() {
     [sample, setSample] = useState<SampleId | null>("pending");
   const [loading, setLoading] = useState(false),
     [error, setError] = useState(""),
-    [copied, setCopied] = useState(false);
+    [copied, setCopied] = useState(false),
+    [manualSummary, setManualSummary] = useState("");
   const report = reports[selected],
     completed = report.outcome === "completed",
     uncertain = ["unknown", "source-failed"].includes(report.outcome);
@@ -73,6 +74,7 @@ export default function Home() {
       if (!data.reports?.length)
         throw new Error("No evidence report was returned.");
       setReports(data.reports);
+      setManualSummary("");
       setSelected(0);
       setSample(null);
       revealReport();
@@ -87,6 +89,7 @@ export default function Home() {
   function loadSample(id: SampleId) {
     setSample(id);
     setReports([sampleReport(id)]);
+    setManualSummary("");
     setSelected(0);
     setError("");
     revealReport();
@@ -104,14 +107,19 @@ export default function Home() {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   async function copy() {
+    const summary = `BridgeTrace${report.sample ? " — SIMULATED SAMPLE" : ""}\n${report.headline}\n${chainName(report.sourceChain, report.environment)} → ${chainName(report.destinationChain, report.environment)}\nBurn amount: ${usdcAmount(report.amount)} USDC\nSource: ${report.sourceHash}\nObserved: ${report.observedAt}\n${report.stages.map((s) => `${s.title}: ${s.state} — ${s.evidence || s.detail}`).join("\n")}\nNext step: ${report.nextAction}\nGaps: ${report.gaps.join(" ")}`;
     try {
-      await navigator.clipboard.writeText(
-        `BridgeTrace${report.sample ? " — SIMULATED SAMPLE" : ""}\n${report.headline}\n${chainName(report.sourceChain, report.environment)} → ${chainName(report.destinationChain, report.environment)}\nBurn amount: ${usdcAmount(report.amount)} USDC\nSource: ${report.sourceHash}\nObserved: ${report.observedAt}\n${report.stages.map((s) => `${s.title}: ${s.state} — ${s.evidence || s.detail}`).join("\n")}\nNext step: ${report.nextAction}\nGaps: ${report.gaps.join(" ")}`,
-      );
+      await Promise.race([
+        navigator.clipboard.writeText(summary),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Clipboard unavailable")), 1500),
+        ),
+      ]);
+      setManualSummary("");
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
-      setError("Clipboard is unavailable. Download the JSON report instead.");
+      setManualSummary(summary);
     }
   }
   return (
@@ -279,7 +287,10 @@ export default function Home() {
                 <select
                   id="message"
                   value={selected}
-                  onChange={(e) => setSelected(Number(e.target.value))}
+                  onChange={(e) => {
+                    setSelected(Number(e.target.value));
+                    setManualSummary("");
+                  }}
                 >
                   {reports.map((r, i) => (
                     <option key={r.nonce || i} value={i}>
@@ -450,6 +461,24 @@ export default function Home() {
                 <CircleHelp size={14} />
                 <span>{report.gaps.join(" ")}</span>
               </p>
+            )}
+            {manualSummary && (
+              <div className="manual-copy">
+                <label htmlFor="support-summary">Your support summary</label>
+                <p role="status">
+                  Clipboard access is unavailable. Select and copy this text.
+                </p>
+                <textarea
+                  id="support-summary"
+                  value={manualSummary}
+                  readOnly
+                  rows={8}
+                  onFocus={(e) => e.target.select()}
+                />
+                <button onClick={() => setManualSummary("")}>
+                  Close summary
+                </button>
+              </div>
             )}
             <div className="report-actions">
               <button onClick={() => void copy()}>

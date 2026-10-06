@@ -16,7 +16,7 @@ The first version supports Ethereum ↔ Base, including Sepolia testnets. No wal
 
 The 15-second walkthrough below uses clearly labeled simulated samples.
 
-Try it: https://bridgetrace-rohit.speedy-elf-6136.chatgpt.site
+Try it: https://bridgetrace-rohit.myfinancial-cfp.chatgpt.site
 Source: https://github.com/rohitguta2432/bridgetrace
 
 If you’ve handled cross-chain support, which missing piece would make this more useful?

@@ -2,7 +2,7 @@
 
 **Where did your USDC stop?** BridgeTrace turns a CCTP V2 burn transaction into a three-stage evidence report: source burn → Circle attestation → destination receipt.
 
-[Open the public app](https://bridgetrace-rohit.speedy-elf-6136.chatgpt.site) · [15-second product video](media/bridgetrace-15s.mp4) · [LinkedIn launch draft](launch/linkedin-post.md)
+[Open the public app](https://bridgetrace-rohit.myfinancial-cfp.chatgpt.site) · [15-second product video](media/bridgetrace-15s.mp4) · [LinkedIn launch draft](launch/linkedin-post.md)
 
 ![BridgeTrace showing a simulated pending receipt](docs/dashboard.jpg)
 
