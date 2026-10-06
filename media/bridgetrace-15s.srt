@@ -1,0 +1,24 @@
+1
+00:00:00,000 --> 00:00:02,700
+Where did your USDC stop?
+Trace the burn, attestation, and receipt.
+
+2
+00:00:02,700 --> 00:00:06,700
+Attested. Receipt pending.
+A ready attestation does not mean delivery.
+
+3
+00:00:06,700 --> 00:00:09,700
+See proof of destination receipt.
+Each stage is backed by observable evidence.
+
+4
+00:00:09,700 --> 00:00:12,300
+Take the evidence with you.
+Inspect the details. Export a support report.
+
+5
+00:00:12,300 --> 00:00:15,000
+BridgeTrace. Evidence before assumptions.
+Open source. Read-only. Simulated product walkthrough.
